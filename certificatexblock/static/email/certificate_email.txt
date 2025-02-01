@@ -1,0 +1,11 @@
+
+Hi {{ username }},
+
+Congratulations!, You have earned certificate for {{ course_name }}.
+
+You can access your certificate using below link:
+{{ cert_link }}
+
+Enjoy learning with {{platform_name}}
+
+The {platform_name} Team.

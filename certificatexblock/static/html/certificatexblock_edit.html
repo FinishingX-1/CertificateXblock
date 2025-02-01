@@ -1,0 +1,29 @@
+<div class="wrapper-comp-settings is-active editor-with-buttons certificatexblock_block" id="settings-tab">
+    <ul class="list-input settings-list">
+        <li class="field comp-setting-entry is-set">
+            <div class="wrapper-comp-setting">
+                <label class="label setting-label" for="display_name">Display Name</label>
+                <input class="input setting-input" name="display_name" id="display_name" value="{{ display_name }}" type="text" />
+            </div>
+            <div class="wrapper-comp-setting">
+                <label class="label setting-label" for="enable_email">Send Certificate link into Email</label>
+                <select id="enable_email">
+                    <option value="True" {% if enable_email %}selected{% endif %}>True</option>
+                    <option value="False" {% if not enable_email %}selected{% endif %}>False</option>
+                </select>
+                <label class="help-label">Select True if you want to send certificate link into email.</label>
+            </div>
+        </li>
+    </ul>
+    <div class="row module-actions">
+        <ul>
+            <li class="action-item">
+                <a href="#" class="button action-primary save-button">Save</a>
+            </li>
+            <li class="action-item">
+                <a href="#" class="button cancel-button">Cancel</a>
+            </li>
+        </ul>
+    </div>
+</div>
+

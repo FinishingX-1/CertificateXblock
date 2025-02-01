@@ -1,0 +1,23 @@
+/* CSS for CertificateXBlock */
+.certificatexblock_block .xblock_block .final-submit{font-size: 18px; background: none; border: none;}
+.certificatexblock_block .xblock_block .final-submit:hover,
+.certificatexblock_block .xblock_block .final-submit:focus{box-shadow: none;background: none; border: none;}
+.certificatexblock_block .certificate-message{background: #f1f1f1;padding: 20px;border-left: 3px solid #9B357C; margin-top: 15px;}
+.certificatexblock_block .certificate-message p.certs {margin: 0;font-weight: bold;}
+article.xblock-render .certificatexblock_block .certificate-message{display: none;}
+.confirmFinalSubmit {display: none;position: fixed;z-index: 9999;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgba(0,0,0,0.5);}
+.confirmFinalSubmit .modal-content {background-color: #fff;margin: 15% auto;padding: 20px;max-width: 541px;border-radius: 15px;}
+.confirmFinalSubmit .close.header {color: #aaa;float: right;font-size: 22px;font-weight: bold;color: #000000;border: 2px solid #000000;line-height: 22px;text-align: center;width: 24px;border-radius: 50%;height: 24px;margin-top: -15px;margin-bottom: 10px}
+.confirmFinalSubmit .close.header:hover,
+.confirmFinalSubmit .close.header:focus {color: black;text-decoration: none;cursor: pointer;}
+.confirmFinalSubmit .modal-footer{text-align: center;}
+.confirmFinalSubmit .modal-footer::before, .confirmFinalSubmit .modal-footer::after{display: table;content: " ";}
+.confirmFinalSubmit .modal-footer::after{clear: both;}
+.confirmFinalSubmit .modal-footer .btn-brand{margin: 2%; color: #fff;}
+.confirmFinalSubmit .modal-footer .btn-brand:hover,.confirmFinalSubmit .modal-footer .btn-brand:focus{background: #fff;color: #954986;border-color: #954986;}
+.confirmFinalSubmit .modal-body h2{position: relative;text-align: center;text-shadow: 0 1px rgba(255,255,255,0.4);font: normal 1.2em/1.2em Georgia,Cambria,"Times New Roman",Times,serif;margin-bottom: 15px;-webkit-font-smoothing: antialiased;font-size: 20px;}
+.certificatexblock_block .xblock_block{text-align: center;margin: 25px;}
+.certificatexblock_block .xblock_block .submission-feedback{display: block;margin-right: 10px;margin-top: 10px;color: #666;font-size: 0.9em;-webkit-font-smoothing: antialiased;vertical-align: middle;margin-left: 10px;}
+.confirmFinalSubmit .modal-dialog{margin: 0 15px; max-width: inherit;}
+.certificatexblock_block .final-submit{border-radius: 100px; border-width: 2px;}
+.certificatexblock_block .final-submit:hover{background-color: #ffffff !important; color: #954986}
