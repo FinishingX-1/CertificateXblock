@@ -5,7 +5,7 @@ from webob import Response
 from xblock.core import XBlock
 from xblock.fields import Integer, Scope, String, Boolean
 from xblock.fragment import Fragment
-
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -14,10 +14,10 @@ from xmodule.modulestore.django import modulestore
 from opaque_keys.edx.keys import CourseKey
 
 from lms.djangoapps.certificates import api as certs_api
-from lms.djangoapps.certificates.utils import get_certificate_url
+from lms.djangoapps.certificates.utils import _certificate_download_url
 from common.djangoapps.student.models import CourseEnrollment
+from lms.djangoapps.certificates.models import GeneratedCertificate
 from lms.djangoapps.grades.api import CourseGradeFactory
-
 
 log = logging.getLogger("cetificatexblock")
 
@@ -126,13 +126,10 @@ class CertificateXBlock(XBlock):
     # than one handler, or you may not need any handlers at all.
     @XBlock.handler
     def generate_certificate(self, data, suffix=""):
+        from lms.djangoapps.courseware.views.views import get_cert_data
+
         is_cert_available = False
         cert_redirect_url = ""
-        from courseware.views.views import (
-            _track_successful_certificate_generation,
-            _get_cert_data,
-        )
-
         student = User.objects.get(pk=self.runtime.user_id)
         course_key = self.runtime.course_id
         course = modulestore().get_course(course_key, depth=2)
@@ -140,9 +137,7 @@ class CertificateXBlock(XBlock):
             student, course_key
         )
         course_grade = CourseGradeFactory().read(student, course)
-        certificate_data = _get_cert_data(
-            student, course, enrollment_mode, course_grade
-        )
+        certificate_data = get_cert_data(student, course, enrollment_mode, course_grade)
         if certificate_data:
             certificate_status = certs_api.certificate_downloadable_status(
                 student, course.id
@@ -156,17 +151,18 @@ class CertificateXBlock(XBlock):
             elif certificate_status["is_generating"]:
                 message = "Die Teilnahmebescheinigung wird erstellt ┃ Certificate is being created."
             else:
-                certs_api.generate_user_certificates(
-                    student, course.id, course=course, generation_mode="self"
-                )
-                _track_successful_certificate_generation(student.id, course.id)
+                certs_api.generate_certificate_task(student, course.id, "self")
                 is_cert_available = True
-                cert_redirect_url = settings.LMS_ROOT_URL + get_certificate_url(
-                    student.id, course_key
+                user_certificate = GeneratedCertificate.eligible_certificates.get(
+                    user=student.id, course_id=course_key
+                )
+                cert_redirect_url = settings.LMS_ROOT_URL + reverse(
+                    "certificates:render_cert_by_uuid",
+                    kwargs={"certificate_uuid": user_certificate.verify_uuid},
                 )
                 message = "Herzlichen Glückwunsch! Sie haben den Kurs erfolgreich abgeschlossen. ┃ Congratulations! You have successfully completed the training course."
-                if self.send_email:
-                    self.send_certificate_email(student, cert_redirect_url, course)
+                # if self.send_email:
+                #     self.send_certificate_email(student, cert_redirect_url, course)
 
         else:
             message = "Die Teilnahmebescheinigung konnte nicht ausgestellt werden. Sie haben die erforderliche Punktzahl nicht erreicht. Bitte stellen Sie sicher, dass Sie alle Testfragen beantwortet haben.┃ The certificate was not issued. You have not reached the required score. Please make sure you have answered all test questions."
